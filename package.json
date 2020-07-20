@@ -1,0 +1,41 @@
+{
+  "name": "redux-test-saga",
+  "version": "1.0.0-alpha.1",
+  "description": "Easy redux saga testing",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "lint": "eslint */**/*.ts --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gareththegeek/redux-test-saga.git"
+  },
+  "keywords": [
+    "redux",
+    "saga",
+    "test"
+  ],
+  "author": "gareththegeek",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gareththegeek/redux-test-saga/issues"
+  },
+  "homepage": "https://github.com/gareththegeek/redux-test-saga#readme",
+  "devDependencies": {
+    "@types/jest": "^26.0.5",
+    "@typescript-eslint/eslint-plugin": "^3.6.1",
+    "@typescript-eslint/parser": "^3.6.1",
+    "eslint": "^7.5.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "jest": "^26.1.0",
+    "prettier": "^2.0.5",
+    "typescript": "^3.9.7"
+  },
+  "dependencies": {
+    "redux": "^4.0.5",
+    "redux-saga": "^1.1.3"
+  }
+}
