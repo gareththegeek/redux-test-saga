@@ -15,6 +15,7 @@
     "forceConsistentCasingInFileNames": true
   },
   "exclude": [
-    "**/*.spec.ts"
+    "**/*.spec.ts",
+    "dist/"
   ]
 }
