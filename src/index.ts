@@ -7,12 +7,12 @@ export interface TestSaga {
     put: (expected: any) => TestSaga
     call: (expectedFn: (...args: any[]) => any, ...expected: any[]) => TestSaga
     // TODO apply cps putResolve fork spawn join cancel select actionChannel flush cancelled
-    // TODO setContext getContext delay throttle debounce retry 
+    // TODO setContext getContext delay throttle debounce retry
     // TODO race all ?
     done: () => void
 }
 
-export const testSaga = (saga: (action: Action) => Generator, action: Action): TestSaga => {
+export const testSaga = (saga: (action: Action) => Generator, action: Action, expectFn = expect): TestSaga => {
     let previousResult: any = undefined
 
     const buildChainable = () => ({
@@ -21,17 +21,17 @@ export const testSaga = (saga: (action: Action) => Generator, action: Action): T
             return buildChainable()
         },
         put: (expected: any) => {
-            expect(gen.next(previousResult).value).toStrictEqual(put(expected))
+            expectFn(gen.next(previousResult).value).toStrictEqual(put(expected))
             previousResult = undefined
             return buildChainable()
         },
         call: (expectedFn: (...args: any[]) => any, ...expected: any[]) => {
-            expect(gen.next(previousResult).value).toStrictEqual(call(expectedFn, ...expected))
+            expectFn(gen.next(previousResult).value).toStrictEqual(call(expectedFn, ...expected))
             previousResult = undefined
             return buildChainable()
         },
         done: () => {
-            expect(gen.next(previousResult).done).toBe(true)
+            expectFn(gen.next(previousResult).done).toBe(true)
             previousResult = undefined
         },
     })
