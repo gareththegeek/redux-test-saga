@@ -32,7 +32,9 @@ describe('testSaga', () => {
     type Fn = (...args: any[]) => any
     it('correctly expects a call effect', () => {
         // Arrange
-        const expectedFn: Fn = (_: number, __: string) => {}
+        const expectedFn: Fn = (_: number, __: string) => {
+            /* STUB */
+        }
         const expectedArgs = [1, 'a']
         const saga = function* () {
             yield call(expectedFn, ...expectedArgs)

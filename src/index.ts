@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Action } from 'redux'
 import TestSaga from './TestSaga'
 import { result } from './result'
@@ -13,6 +12,7 @@ export const testSaga = (saga: (action: Action) => Generator, action: Action, ex
         expectFn,
     }
 
+    /* eslint-disable-next-line @typescript-eslint/ban-types */
     const impurify = (func: Function) => (...args: any[]) => {
         context.previousResult = func(context, ...args)
         return api
