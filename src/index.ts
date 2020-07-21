@@ -5,6 +5,8 @@ import { done } from './done'
 import { put } from './effects/put'
 import { call } from './effects/call'
 
+export { TestSaga }
+
 export const testSaga = (saga: (action: Action) => Generator, action: Action, expectFn = expect): TestSaga => {
     const context = {
         previousResult: undefined,
