@@ -1,41 +1,29 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Action } from 'redux'
-import { put, call } from 'redux-saga/effects'
-
-export interface TestSaga {
-    result: (value: any) => TestSaga
-    put: (expected: any) => TestSaga
-    call: (expectedFn: (...args: any[]) => any, ...expected: any[]) => TestSaga
-    // TODO apply cps putResolve fork spawn join cancel select actionChannel flush cancelled
-    // TODO setContext getContext delay throttle debounce retry
-    // TODO race all ?
-    done: () => void
-}
+import TestSaga from './TestSaga'
+import { result } from './result'
+import { done } from './done'
+import { put } from './effects/put'
+import { call } from './effects/call'
 
 export const testSaga = (saga: (action: Action) => Generator, action: Action, expectFn = expect): TestSaga => {
-    let previousResult: any = undefined
+    const context = {
+        previousResult: undefined,
+        generator: saga(action),
+        expectFn,
+    }
 
-    const buildChainable = () => ({
-        result: (value: any) => {
-            previousResult = value
-            return buildChainable()
-        },
-        put: (expected: any) => {
-            expectFn(gen.next(previousResult).value).toStrictEqual(put(expected))
-            previousResult = undefined
-            return buildChainable()
-        },
-        call: (expectedFn: (...args: any[]) => any, ...expected: any[]) => {
-            expectFn(gen.next(previousResult).value).toStrictEqual(call(expectedFn, ...expected))
-            previousResult = undefined
-            return buildChainable()
-        },
-        done: () => {
-            expectFn(gen.next(previousResult).done).toBe(true)
-            previousResult = undefined
-        },
-    })
+    const impurify = (func: Function) => (...args: any[]) => {
+        context.previousResult = func(context, ...args)
+        return api
+    }
 
-    const gen = saga(action)
-    return buildChainable()
+    const api = {
+        result: impurify(result),
+        put: impurify(put),
+        call: impurify(call),
+        done: impurify(done),
+    }
+
+    return api
 }
