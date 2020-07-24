@@ -35,16 +35,15 @@ describe('testSaga', () => {
         const expectedFn: Fn = (_: number, __: string) => {
             /* STUB */
         }
-        const expectedArgs = [1, 'a']
         const saga = function* () {
-            yield call(expectedFn, ...expectedArgs)
+            yield call(expectedFn, 1, 'a')
         }
 
         // Act
-        testSaga(saga, { type: 'foo' }, expectMock as jest.Expect).call(expectedFn, expectedArgs)
+        testSaga(saga, { type: 'foo' }, expectMock as jest.Expect).call(expectedFn, 1, 'a')
 
         // Assert
-        expect(toStrictEqual).toBeCalledWith(call(expectedFn, expectedArgs))
+        expect(toStrictEqual).toBeCalledWith(call(expectedFn, 1, 'a'))
     })
 
     it('correctly expects that the saga is done', () => {
