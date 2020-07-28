@@ -17,11 +17,15 @@ yarn add --dev redux-test-saga
 function* fetchWossnamesSaga(action: Action) {
     yield put(fetchWossnamesStart())
 
-    const { success, error, wossnames } = yield call(fetchWossnames)
-    if (success) {
-        yield put(fetchWossnamesSuccess(wossnames))
-    } else {
-        yield put(fetchWossnamesFailure(error))
+    try {
+        const { success, error, wossnames } = yield call(fetchWossnames)
+        if (success) {
+            yield put(fetchWossnamesSuccess(wossnames))
+        } else {
+            yield put(fetchWossnamesFailure(error))
+        }
+    } catch (e) {
+        yield put(fetchWossnamesFailure(e.message))
     }
 }
 ```
@@ -36,6 +40,15 @@ describe('fetchWossnameSaga', () => {
             .call(fetchWossnames)
             .result({ success: true, wossnames })
             .put(fetchWossnamesSuccess(wossnames))
+            .done()
+    })
+
+    it('handles unexpeced errors', () => {
+        testSaga(fetchWossnamesSaga, fetchWossnames())
+            .put(fetchWossnamesStart())
+            .call(fetchWossnames)
+            .throw(new Error('Oh no'))
+            .put(fetchWossnamesFailure('Oh no'))
             .done()
     })
 })

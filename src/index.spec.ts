@@ -1,5 +1,6 @@
 import { put, call, select } from 'redux-saga/effects'
 import { testSaga } from '.'
+import { Action } from 'redux'
 
 describe('testSaga', () => {
     let expectMock: jest.Expect | jest.Mock
@@ -102,7 +103,7 @@ describe('testSaga', () => {
         testSaga(fixture.saga, { type: 'type' }, expectMock as jest.Expect).put({ type: 'bar' })
 
         // Assert
-        expect(fixture.next).toBeCalledWith(undefined)
+        expect(fixture.next).toBeCalledWith()
         expect(expectMock).toBeCalledWith(expected)
     })
 
@@ -135,8 +136,27 @@ describe('testSaga', () => {
             .put({ type: 'bar' })
 
         // Assert
-        expect(fixture.next).toHaveBeenCalledWith(undefined)
+        expect(fixture.next).toHaveBeenCalledWith()
         expect(fixture.next).toHaveBeenCalledWith(unexpected)
-        expect(fixture.next).toHaveBeenCalledWith(undefined)
+        expect(fixture.next).toHaveBeenCalledWith()
+    })
+
+    it('throws specified error into saga', () => {
+        const expected = new Error('Oh noes')
+
+        const callFn = () => {/* stub */}
+        const saga = function* (action: Action) {
+            try {
+                yield call(callFn)
+                yield put({ type: 'SUCCESS' })
+            } catch (e) {
+                yield put({ type: 'ERROR', payload: { e } })
+            }
+        }
+
+        testSaga(saga, { type: 'foo' })
+            .call(callFn)
+            .throw(expected)
+            .put({ type: 'ERROR', payload: { e: expected } } as Action)
     })
 })
