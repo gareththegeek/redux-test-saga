@@ -1,4 +1,4 @@
-import { put, call } from 'redux-saga/effects'
+import { put, call, select } from 'redux-saga/effects'
 import { testSaga } from '.'
 
 describe('testSaga', () => {
@@ -44,6 +44,22 @@ describe('testSaga', () => {
 
         // Assert
         expect(toStrictEqual).toBeCalledWith(call(expectedFn, 1, 'a'))
+    })
+
+    it('correctly expects a select effect', () => {
+        // Arrange
+        const expectedFn: Fn = (_: number, __: string) => {
+            /* STUB */
+        }
+        const saga = function* () {
+            yield call(expectedFn)
+        }
+
+        // Act
+        testSaga(saga, { type: 'foo' }, expectMock as jest.Expect).select(expectedFn)
+
+        // Assert
+        expect(toStrictEqual).toBeCalledWith(select(expectedFn))
     })
 
     it('correctly expects that the saga is done', () => {

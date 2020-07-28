@@ -4,6 +4,7 @@ import { result } from './result'
 import { done } from './done'
 import { put } from './effects/put'
 import { call } from './effects/call'
+import { select } from './effects/select'
 
 export { TestSaga }
 
@@ -24,6 +25,7 @@ export const testSaga = (saga: (action: Action) => Generator, action: Action, ex
         result: impurify(result),
         put: impurify(put),
         call: impurify(call),
+        select: impurify(select),
         done: impurify(done),
     }
 
