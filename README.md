@@ -14,7 +14,7 @@ yarn add --dev redux-test-saga
 ### Usage example
 
 ```typescript
-function* fetchWossnamesSaga(action: Action) {
+export function* fetchWossnamesSaga(action: Action) {
     yield put(fetchWossnamesStart())
 
     try {
@@ -31,6 +31,10 @@ function* fetchWossnamesSaga(action: Action) {
 ```
 
 ```typescript
+import { testSaga } from 'redux-test-saga'
+import { fetchWossnames } from './actions'
+//etc.
+
 describe('fetchWossnameSaga', () => {
     it('handles happy path', () => {
         const wossnames = [{ foo: 'bar' }]

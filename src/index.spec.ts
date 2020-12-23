@@ -144,8 +144,10 @@ describe('testSaga', () => {
     it('throws specified error into saga', () => {
         const expected = new Error('Oh noes')
 
-        const callFn = () => {/* stub */}
-        const saga = function* (action: Action) {
+        const callFn = () => {
+            /* stub */
+        }
+        const saga = function* (_action: Action) {
             try {
                 yield call(callFn)
                 yield put({ type: 'SUCCESS' })
