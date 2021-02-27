@@ -5,6 +5,7 @@ export default interface TestSaga {
     put: (expected: Action) => TestSaga
     call: (expectedFn: (...args: any[]) => any, ...expected: any[]) => TestSaga
     select: (expectedFn: (...args: any[]) => any, ...expected: any[]) => TestSaga
+    take: (expectedAction: string | string[]) => TestSaga
     throw: (error: Error) => TestSaga
     // TODO apply cps putResolve fork spawn join cancel actionChannel flush cancelled
     // TODO setContext getContext delay throttle debounce retry
