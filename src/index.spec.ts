@@ -1,4 +1,4 @@
-import { put, call, select } from 'redux-saga/effects'
+import { put, call, select, take } from 'redux-saga/effects'
 import { testSaga } from '.'
 import { Action } from 'redux'
 
@@ -53,7 +53,7 @@ describe('testSaga', () => {
             /* STUB */
         }
         const saga = function* () {
-            yield call(expectedFn)
+            yield select(expectedFn)
         }
 
         // Act
@@ -61,6 +61,20 @@ describe('testSaga', () => {
 
         // Assert
         expect(toStrictEqual).toBeCalledWith(select(expectedFn))
+    })
+
+    it('correctly expects a take effect', () => {
+        // Arrange
+        const expectedActions = ['ACTION_ONE', 'ACTION_TWO']
+        const saga = function* () {
+            yield take(expectedActions)
+        }
+
+        // Act
+        testSaga(saga, { type: 'foo' }, expectMock as jest.Expect).take(expectedActions)
+
+        // Assert
+        expect(toStrictEqual).toBeCalledWith(take(expectedActions))
     })
 
     it('correctly expects that the saga is done', () => {
